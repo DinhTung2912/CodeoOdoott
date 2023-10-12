@@ -1,0 +1,41 @@
+<odoo>
+    <data>
+        <!-- Định nghĩa lớp view mới cho đối tượng khách hàng -->
+        <record id="view_customer_inherited" model="ir.ui.view">
+            <field name="name">sale.customer.form.inherited</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/> <!-- Sửa ref thành view gốc -->
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="project_id"/>
+
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Định nghĩa action "Customer List" -->
+        <record id="action_customer_list" model="ir.actions.act_window">
+            <field name="name">Customer List</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_customer_inherited"/>
+        </record>
+
+        <!-- Định nghĩa action "Create Customer" -->
+        <record id="action_create_customer" model="ir.actions.act_window">
+            <field name="name">Create Customer</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_customer_inherited"/>
+            <field name="context">{'default_customer': True}</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Tạo menu cho khách hàng -->
+        <menuitem id="menu_customer_root" name="Customers" sequence="10"/>
+        <menuitem id="menu_customer_list" parent="menu_customer_root" name="Customer List" action="action_customer_list"
+                  sequence="10"/>
+        <menuitem id="menu_customer" name="Customer" parent="menu_customer_list" action="action_create_customer"
+                  sequence="20"/>
+    </data>
+</odoo>
